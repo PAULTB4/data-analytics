@@ -50,6 +50,13 @@ data_analysis_project/
 │   ├── figures/               # Gráficos exportados
 │   └── tables/                # Tablas finales
 │
+reports/
+├── templates/
+│   └── informe.html.jinja
+├── build/
+│   └── informe_final.html
+└── generate_report.py
+│
 ├── requirements.txt
 ├── README.md
 └── main.py                     # Punto de entrada opcional

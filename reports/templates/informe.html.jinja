@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Informe Final de Análisis</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+        line-height: 1.6;
+    }
+    h1, h2, h3 {
+        color: #2c3e50;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .subtitle {
+        text-align: center;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 30px;
+    }
+    img {
+        max-width: 100%;
+        margin: 20px 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 15px 0;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        font-size: 14px;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .nota {
+        font-style: italic;
+        color: #555;
+        font-size: 13px;
+    }
+    hr {
+        margin: 40px 0;
+    }
+    a {
+    color: #2c3e50;        /* gris oscuro elegante */
+    text-decoration: none; /* sin subrayado */
+    font-weight: normal;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+ol > li > a {
+    font-weight: bold;     /* secciones principales */
+}
+
+ol ol li a {
+    font-weight: normal;  /* subsecciones */
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Análisis de Órdenes de Bienes y Servicios</h1>
+<p class="subtitle">
+Informe generado automáticamente a partir de un pipeline de analítica de datos en Python
+</p>
+
+<hr>
+
+<h2>Integrantes de la investigación</h2>
+<ul>
+    <li>Tarazona Benancio Paul Marco</li>
+    <li>Romero Rengifo Jorge Faris</li>
+</ul>
+
+<hr>
+
+<h2>Índice</h2>
+<ol>
+    <li><a href="#introduccion">Introducción</a></li>
+    <li><a href="#dataset">Descripción del dataset</a></li>
+    <li><a href="#metodologia">Metodología de análisis</a></li>
+    <li>
+        <a href="#resultados">Resultados del análisis descriptivo</a>
+        <ol>
+            <li><a href="#concentracion">Concentración del gasto por proveedor</a></li>
+            <li><a href="#estados">Distribución de órdenes por estado</a></li>
+            <li><a href="#ordenes-monto">Relación entre número de órdenes y monto total</a></li>
+            <li><a href="#temporal">Evolución temporal del gasto</a></li>
+            <li><a href="#tipo-contratacion">Análisis por tipo de contratación</a></li>
+        </ol>
+    </li>
+    <li><a href="#discusion">Discusión de hallazgos</a></li>
+    <li><a href="#conclusiones">Conclusiones</a></li>
+</ol>
+
+<hr>
+
+<h2 id="introduccion">1. Introducción</h2>
+<p>
+El presente informe tiene como objetivo analizar el comportamiento de las órdenes de bienes
+y servicios registradas durante el periodo de estudio. A través de un enfoque descriptivo
+y exploratorio, se busca identificar patrones relevantes en la distribución del gasto,
+la concentración por proveedor, el estado de ejecución de las órdenes y su evolución temporal.
+</p>
+
+<hr>
+
+<h2 id="dataset">2. Descripción del dataset</h2>
+<p>
+El dataset analizado contiene información detallada de órdenes de bienes y servicios, incluyendo
+variables como tipo de orden, tipo de contratación, proveedor, estado del proceso, monto adjudicado
+y fechas relevantes. Previo al análisis, los datos fueron sometidos a procesos de limpieza,
+validación y transformación para garantizar su consistencia y trazabilidad.
+</p>
+
+<hr>
+
+<h2 id="metodologia">3. Metodología de análisis</h2>
+<p>
+El análisis se desarrolló mediante un pipeline automatizado estructurado en fases: ingesta de datos,
+limpieza y validación, transformación analítica, análisis descriptivo, visualización y generación
+automática de informes. Se emplearon técnicas de estadística descriptiva, agregaciones por grupos
+y análisis temporal, complementadas con visualizaciones orientadas a la comunicación clara
+de los resultados.
+</p>
+
+<hr>
+
+<h2 id="resultados">4. Resultados del análisis descriptivo</h2>
+
+<h3 id="concentracion">4.1 Concentración del gasto por proveedor</h3>
+<p>
+El análisis de concentración del gasto permite identificar el grado de dependencia respecto a
+proveedores específicos. Se observa que el proveedor con mayor participación individual concentra
+aproximadamente <strong>{{ top_proveedor_pct }}%</strong> del monto total adjudicado, lo que evidencia
+una concentración moderada del gasto.
+</p>
+
+<h4>Tabla 1. Principales proveedores y participación porcentual</h4>
+<table>
+<tr>
+    <th>Proveedor</th>
+    <th>Monto total</th>
+    <th>Participación (%)</th>
+</tr>
+{% for row in concentracion %}
+<tr>
+    <td>{{ row.razon_social }}</td>
+    <td>{{ "{:,.2f}".format(row.monto_total) }}</td>
+    <td>{{ "{:.2f}".format(row.participacion_pct) }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<p class="nota">
+Se presentan únicamente los proveedores con mayor participación para facilitar la interpretación.
+</p>
+
+<img src="../../outputs/figures/concentracion_proveedores.png">
+
+<hr>
+
+<h3 id="estados">4.2 Distribución de órdenes por estado</h3>
+<p>
+El estado de las órdenes refleja el nivel de avance de los procesos contractuales. La distribución
+observada permite evaluar el grado de ejecución administrativa.
+</p>
+
+<h4>Tabla 2. Número de órdenes por estado</h4>
+<table>
+<tr>
+    <th>Estado</th>
+    <th>Número de órdenes</th>
+</tr>
+{% for row in estados %}
+<tr>
+    <td>{{ row.estado }}</td>
+    <td>{{ row.numero_ordenes }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<img src="../../outputs/figures/estados.png">
+
+<p class="nota">
+La predominancia de órdenes en estado devengado sugiere un alto nivel de ejecución.
+</p>
+
+<hr>
+
+<h3 id="ordenes-monto">4.3 Relación entre número de órdenes y monto total</h3>
+<p>
+El análisis de la relación entre el número de órdenes y el monto total permite identificar
+diferencias entre contratos de alta frecuencia y contratos de alto valor económico.
+</p>
+
+<h4>Tabla 3. Órdenes y monto total</h4>
+<table>
+<tr>
+    <th>Número de órdenes</th>
+    <th>Monto total</th>
+</tr>
+{% for row in ordenes_monto %}
+<tr>
+    <td>{{ row.numero_ordenes }}</td>
+    <td>{{ "{:,.2f}".format(row.monto_total) }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<img src="../../outputs/figures/ordenes_vs_monto.png">
+
+<hr>
+
+<h3 id="temporal">4.4 Evolución temporal del gasto</h3>
+<p>
+La evolución temporal del gasto permite identificar periodos de mayor concentración del monto
+adjudicado, así como patrones de ejecución a lo largo del tiempo.
+</p>
+
+<h4>Tabla 4. Evolución mensual del monto total</h4>
+<table>
+<tr>
+    <th>Periodo</th>
+    <th>Monto total</th>
+</tr>
+{% for row in temporal %}
+<tr>
+    <td>{{ row.anio_mes }}</td>
+    <td>{{ "{:,.2f}".format(row.monto_total) }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<img src="../../outputs/figures/temporal.png">
+
+<hr>
+
+<h3 id="tipo-contratacion">4.5 Análisis por tipo de contratación</h3>
+<p>
+El análisis por tipo de contratación permite evaluar qué mecanismos concentran la mayor proporción
+del gasto y cómo se distribuyen los recursos según la modalidad contractual.
+</p>
+
+<h4>Tabla 5. Monto total por tipo de contratación</h4>
+<table>
+<tr>
+    <th>Tipo de contratación</th>
+    <th>Monto total</th>
+</tr>
+{% for row in tipo_contratacion %}
+<tr>
+    <td>{{ row.tipo_contratacion }}</td>
+    <td>{{ "{:,.2f}".format(row.monto_total) }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<img src="../../outputs/figures/tipo_contratacion.png">
+
+<hr>
+
+<h2 id="discusion">5. Discusión de hallazgos</h2>
+<p>
+En conjunto, los resultados evidencian una estructura de gasto caracterizada por una concentración
+moderada en proveedores específicos, una ejecución administrativa mayoritaria en estados avanzados
+y una dinámica temporal marcada por picos de gasto en periodos concretos.
+</p>
+
+<hr>
+
+<h2 id="conclusiones">6. Conclusiones</h2>
+<p>
+El análisis desarrollado permitió identificar patrones relevantes en la gestión de órdenes de bienes
+y servicios. Destaca la concentración del gasto en un grupo reducido de proveedores, la predominancia
+de órdenes devengadas y la existencia de picos temporales significativos. Estos hallazgos constituyen
+una base sólida para evaluaciones futuras de eficiencia y planificación contractual.
+</p>
+
+</body>
+</html>
