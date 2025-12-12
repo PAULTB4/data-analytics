@@ -11,6 +11,13 @@ from src.analysis.tipo_contratacion_estado import run as run_cruce
 from src.analysis.temporal import run as run_temporal
 from src.analysis.estados_profundizado import run as run_estados_det
 from src.analysis.duplicados import run as run_duplicados
+from src.visualization.plots import (
+    plot_tipo_contratacion,
+    plot_estados,
+    plot_concentracion_proveedores,
+    plot_ordenes_vs_monto,
+    plot_temporal,
+)
 
 
 def main() -> None:
@@ -40,6 +47,13 @@ def main() -> None:
     run_temporal()
     run_estados_det()
     run_duplicados()
+
+    print("FASE 5 — Visualización de resultados...")
+    plot_tipo_contratacion()
+    plot_estados()
+    plot_concentracion_proveedores()
+    plot_ordenes_vs_monto()
+    plot_temporal()
 
     print("Pipeline ejecutado correctamente.")
 

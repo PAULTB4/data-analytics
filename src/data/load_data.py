@@ -1,4 +1,5 @@
 import pandas as pd
+from src.config.settings import RAW_DATA_FILE
 
 from src.config.settings import (
     RAW_DATA_FILE,
@@ -11,20 +12,12 @@ from src.config.settings import (
 
 def load_raw_data() -> pd.DataFrame:
     """
-    Carga el dataset original desde data/raw.
+    Carga el dataset original desde Excel.
 
-    Returns
-    -------
-    pd.DataFrame
-        Dataset crudo cargado en memoria.
     """
-    df = pd.read_csv(
+    df = pd.read_excel(
         RAW_DATA_FILE,
-        encoding=CSV_ENCODING,
-        sep=CSV_SEPARATOR,
-        engine="python",
-        quotechar='"',
-        on_bad_lines="skip"
+        engine="openpyxl"
     )
     return df
 

@@ -14,6 +14,8 @@ data_analysis_project/
 │   └── processed/              # Datos listos para análisis
 │       └── dataset_analitico.parquet
 │
+├── scripts/
+│   └── debug_columns.py
 ├── src/
 │   ├── config/
 │   │   └── settings.py         # Rutas, constantes, parámetros globales

@@ -43,7 +43,52 @@ def create_auxiliary_features(df: pd.DataFrame) -> pd.DataFrame:
     # df["n_contratos"] = 1
     return df
 
+def normalize_date_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Convierte columnas de fecha a datetime.
+    """
+    date_cols = [
+        "fecha_emision",
+        "fecha_compromiso",
+    ]
+
+    for col in date_cols:
+        if col in df.columns:
+            df[col] = pd.to_datetime(df[col], errors="coerce")
+
+    return df
+
+
 def normalize_column_names(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Normaliza nombres de columnas para análisis.
+    """
+    # 1️⃣ Limpieza defensiva
+    df.columns = (
+        df.columns
+        .str.strip()
+        .str.replace("\n", "", regex=False)
+        .str.replace("\r", "", regex=False)
+    )
+
+    # 2️⃣ Renombrado explícito
+    df = df.rename(columns={
+        "N°": "id",
+        "Tipo de Orden": "tipo_orden",
+        "Número de orden": "numero_orden",
+        "Tipo de Contratación": "tipo_contratacion",
+        "Descripción y Finalidad de la contratación": "descripcion",
+        "Nro. Exp. SIAF": "exp_siaf",
+        "Fecha de Emisión": "fecha_emision",
+        "Fecha de Compromiso": "fecha_compromiso",
+        "Estado": "estado",
+        "Monto": "monto",
+        "RUC": "ruc",
+        "Denominación o razón Social": "razon_social",
+    })
+
+    return df
+
     """
     Normaliza nombres de columnas para análisis.
     """
@@ -73,6 +118,7 @@ def transform_dataset(df: pd.DataFrame) -> pd.DataFrame:
     df = recode_contract_types(df)
     df = create_auxiliary_features(df)
     df = normalize_column_names(df)
+    df = normalize_date_columns(df)
     return df
 
 
