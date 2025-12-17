@@ -25,12 +25,8 @@ env/
 # =====================
 # Datos (no versionar datos grandes)
 # =====================
-data/raw/
-data/interim/
-data/processed/
-*.parquet
+
 *.csv
-*.xlsx
 
 # =====================
 # Outputs / Resultados
