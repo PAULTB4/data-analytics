@@ -29,15 +29,6 @@ env/
 *.csv
 
 # =====================
-# Outputs / Resultados
-# =====================
-output/
-outputs/
-results/
-figures/
-plots/
-
-# =====================
 # Logs y temporales
 # =====================
 *.log
